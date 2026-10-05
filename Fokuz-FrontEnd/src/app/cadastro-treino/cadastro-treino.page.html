@@ -1,0 +1,369 @@
+<ion-header>
+  <ion-toolbar color="primary">
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cadastro de Treino</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+  @if (mensagemErro) {
+    <ion-text color="danger">
+      <p>{{ mensagemErro }}</p>
+    </ion-text>
+  }
+
+  <ion-card>
+
+    <ion-card-header>
+      <ion-card-title>Novo Treino</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <!-- Nome do treino -->
+      <ion-item>
+        <ion-label position="stacked">
+          Nome do Treino
+        </ion-label>
+
+        <ion-input
+          [(ngModel)]="treino.nome"
+          placeholder="Ex: Treino A">
+        </ion-input>
+      </ion-item>
+
+      @if (erroNome) {
+        <ion-text color="danger">
+          <p>Informe o nome do treino.</p>
+        </ion-text>
+      }
+
+      <!-- Tipo de rotina -->
+      <ion-item>
+        <ion-label position="stacked">
+          Tipo de Rotina
+        </ion-label>
+
+        <ion-select
+          [(ngModel)]="treino.tipoTreino"
+          placeholder="Selecione o tipo de rotina">
+          @for (tipo of tiposTreino; track tipo) {
+            <ion-select-option [value]="tipo">{{ tipo }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      @if (erroTipoTreino) {
+        <ion-text color="danger">
+          <p>Selecione o tipo de rotina do treino.</p>
+        </ion-text>
+      }
+
+      <!-- Vigência do treino -->
+      <ion-item>
+        <ion-label position="stacked">
+          Início da Vigência
+        </ion-label>
+
+        <ion-input
+          type="date"
+          [(ngModel)]="treino.dataInicio">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">
+          Término da Vigência
+        </ion-label>
+
+        <ion-input
+          type="date"
+          [(ngModel)]="treino.dataFim">
+        </ion-input>
+      </ion-item>
+
+      @if (erroVigencia) {
+        <ion-text color="danger">
+          <p>Informe um período de vigência válido (a data de término não pode ser anterior à de início).</p>
+        </ion-text>
+      }
+
+      <!-- Exercício selecionado (catálogo vindo da API) -->
+      <ion-item>
+        <ion-label position="stacked">
+          Exercício
+        </ion-label>
+
+        <ion-select
+          [(ngModel)]="item.exercicioID"
+          placeholder="Selecione um exercício">
+          @for (exercicio of exercicios; track exercicio.id) {
+            <ion-select-option [value]="exercicio.id">{{ exercicio.nome }}</ion-select-option>
+          }
+        </ion-select>
+      </ion-item>
+
+      <ion-button
+        fill="clear"
+        size="small"
+        (click)="mostrarNovoExercicio = !mostrarNovoExercicio">
+        <ion-icon slot="start" name="add-circle"></ion-icon>
+        {{ mostrarNovoExercicio ? 'Cancelar' : 'Cadastrar novo exercício' }}
+      </ion-button>
+
+      @if (mostrarNovoExercicio) {
+        <ion-item>
+          <ion-label position="stacked">Nome do Exercício</ion-label>
+          <ion-input [(ngModel)]="novoExercicio.nome" placeholder="Ex: Supino Reto"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Código</ion-label>
+          <ion-input [(ngModel)]="novoExercicio.codigo" placeholder="Ex: EX001"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Grupo Muscular</ion-label>
+          <ion-input [(ngModel)]="novoExercicio.grupoMuscular" placeholder="Ex: Peito"></ion-input>
+        </ion-item>
+
+        <ion-item>
+          <ion-label position="stacked">Descrição</ion-label>
+          <ion-input [(ngModel)]="novoExercicio.descricao" placeholder="Opcional"></ion-input>
+        </ion-item>
+
+        <ion-button expand="block" fill="outline" (click)="cadastrarExercicio()">
+          Salvar Exercício no Catálogo
+        </ion-button>
+      }
+
+      
+      <ion-item>
+        <ion-label position="stacked">
+          Séries
+        </ion-label>
+
+        <ion-input
+          type="number"
+          min="1"
+          [(ngModel)]="item.series">
+        </ion-input>
+      </ion-item>
+
+      
+      <ion-item>
+        <ion-label position="stacked">
+          Repetições por série
+        </ion-label>
+
+        <ion-input
+          type="number"
+          min="1"
+          [(ngModel)]="item.repeticoes">
+        </ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-label position="stacked">
+          Carga (Kg)
+        </ion-label>
+
+        <ion-input
+          type="number"
+          min="0"
+          [(ngModel)]="item.carga">
+        </ion-input>
+      </ion-item>
+
+      <!-- Descanso -->
+      <ion-item>
+        <ion-label position="stacked">
+          Descanso (segundos)
+        </ion-label>
+
+        <ion-input
+          type="number"
+          min="0"
+          [(ngModel)]="item.descanso">
+        </ion-input>
+      </ion-item>
+
+      <ion-button
+        expand="block"
+        color="medium"
+        (click)="adicionarExercicio()">
+
+        <ion-icon
+          name="add-circle"
+          slot="start">
+        </ion-icon>
+
+        Adicionar Exercício
+
+      </ion-button>
+
+    </ion-card-content>
+
+  </ion-card>
+
+ 
+
+  @if (treino.exercicios.length > 0) {
+  <ion-card>
+
+    <ion-card-header>
+      <ion-card-title>
+        Exercícios do Treino
+      </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+
+      <ion-list>
+
+        @for (ex of treino.exercicios; track ex; let i = $index) {
+        <ion-item>
+
+          <ion-label>
+
+            <h2>{{ buscarNomeExercicio(ex.exercicioID) }}</h2>
+
+            <p>
+              Séries: {{ ex.series }}
+            </p>
+
+            <p>
+              Repetições: {{ ex.repeticoes }}
+            </p>
+
+            <p>
+              Carga: {{ ex.carga }} kg
+            </p>
+
+            <p>
+              Descanso: {{ ex.descanso }} segundos
+            </p>
+
+          </ion-label>
+
+          <ion-button
+            fill="outline"
+            color="danger"
+            slot="end"
+            type="button"
+            (click)="remover(i)">
+
+            <ion-icon
+              slot="start"
+              name="trash-outline">
+            </ion-icon>
+
+            Excluir
+
+          </ion-button>
+
+        </ion-item>
+        }
+
+      </ion-list>
+
+    </ion-card-content>
+
+  </ion-card>
+  }
+
+  @if (erroExercicios) {
+    <ion-text color="danger">
+      <p>Adicione ao menos um exercício ao treino.</p>
+    </ion-text>
+  }
+
+  <!-- Botão Salvar -->
+
+  <ion-button
+    expand="block"
+    color="success"
+    [disabled]="carregando"
+    (click)="salvar()">
+
+    <ion-icon
+      name="save"
+      slot="start">
+    </ion-icon>
+
+    {{ carregando ? 'Salvando...' : 'Salvar Treino' }}
+
+  </ion-button>
+
+  @if (treinosCadastrados.length > 0) {
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>Treinos Cadastrados</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        @for (treinoCadastrado of treinosCadastrados; track treinoCadastrado.id) {
+        <ion-item
+          button="true"
+          detail="true"
+          (click)="selecionarTreino(treinoCadastrado)">
+          <ion-label>
+            <h2>{{ treinoCadastrado.nome }}</h2>
+            <p>{{ treinoCadastrado.tipoTreino }}</p>
+            <p>Vigência: {{ treinoCadastrado.dataInicio }} a {{ treinoCadastrado.dataFim }}</p>
+            <p>{{ treinoCadastrado.exercicios.length }} exercício(s)</p>
+          </ion-label>
+        </ion-item>
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  @if (treinoSelecionado) {
+  <ion-card class="ion-margin-top">
+    <ion-card-header>
+      <ion-card-title>{{ treinoSelecionado.nome }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p><strong>Tipo de rotina:</strong> {{ treinoSelecionado.tipoTreino }}</p>
+      <p><strong>Vigência:</strong> {{ treinoSelecionado.dataInicio }} a {{ treinoSelecionado.dataFim }}</p>
+
+      <ion-list>
+        @for (exercicio of treinoSelecionado.exercicios; track exercicio.exercicioID) {
+        <ion-item>
+          <ion-label>
+            <h2>{{ buscarNomeExercicio(exercicio.exercicioID) }}</h2>
+            <p>Séries: {{ exercicio.series }}</p>
+            <p>Repetições: {{ exercicio.repeticoes }}</p>
+            <p>Carga: {{ exercicio.carga }} kg</p>
+            <p>Descanso: {{ exercicio.descanso }} segundos</p>
+          </ion-label>
+        </ion-item>
+        }
+      </ion-list>
+    </ion-card-content>
+  </ion-card>
+  }
+
+  <!-- Mensagem de sucesso -->
+
+  @if (sucesso) {
+  <ion-card
+    color="success">
+
+    <ion-card-content>
+
+      Treino cadastrado com sucesso!
+
+    </ion-card-content>
+
+  </ion-card>
+  }
+
+</ion-content>

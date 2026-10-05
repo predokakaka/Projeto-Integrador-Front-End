@@ -1,0 +1,29 @@
+import { Routes } from '@angular/router';
+
+export const routes: Routes = [
+  {
+    path: 'home',
+    loadComponent: () => import('./home/home.page').then((m) => m.HomePage),
+  },
+  {
+    path: '',
+    redirectTo: 'cadastro-treino',
+    pathMatch: 'full',
+  },
+  {
+    path: 'cadastro',
+    loadComponent: () => import('./cadastro/cadastro.page').then( m => m.CadastroPage)
+  },
+  {
+    path: 'perfil',
+    loadComponent: () => import('./perfil/perfil.page').then( m => m.PerfilPage)
+  },
+  {
+    path: 'alteracao-cadastro/:cpf',
+    loadComponent: () => import('./alteracao-cadastro/alteracao-cadastro.page').then( m => m.CadastroAlteracaoPage)
+  },
+  {
+    path: 'cadastro-treino',
+    loadComponent: () => import('./cadastro-treino/cadastro-treino.page').then( m => m.CadastroTreinoPage)
+  },
+];

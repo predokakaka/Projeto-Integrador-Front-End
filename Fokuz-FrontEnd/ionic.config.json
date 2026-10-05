@@ -1,0 +1,7 @@
+{
+  "name": "fokuzVitinPedro",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}

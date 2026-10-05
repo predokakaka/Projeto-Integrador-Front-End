@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Alterar Cadastro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  
+  <form [formGroup]="form">
+    <ion-item>
+      <ion-input label="Nome" label-placement="floating" formControlName="nome">
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Número"
+        label-placement="floating"
+        formControlName="numero"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input
+        label="Email"
+        label-placement="floating"
+        formControlName="email"
+      >
+      </ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-input label="CPF" label-placement="floating" formControlName="cpf">
+      </ion-input>
+    </ion-item>
+
+    <ion-button expand="block" (click)="alterar()"> Alterar </ion-button>
+  </form>
+</ion-content>

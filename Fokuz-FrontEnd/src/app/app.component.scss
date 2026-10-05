@@ -1,0 +1,22 @@
+ion-menu ion-content {
+  --background: var(--ion-item-background, var(--ion-background-color, #fff));
+}
+
+ion-menu ion-item {
+  --padding-start: 16px;
+  --padding-end: 16px;
+  border-radius: 4px;
+}
+
+ion-menu.md ion-item.selecionado {
+  --background: rgba(var(--ion-color-primary-rgb), 0.14);
+  --color: var(--ion-color-primary);
+}
+
+ion-menu.ios ion-item.selecionado {
+  --color: var(--ion-color-primary);
+}
+
+ion-item.selecionado ion-icon {
+  color: var(--ion-color-primary);
+}

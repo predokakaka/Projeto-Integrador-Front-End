@@ -1,0 +1,105 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Cadastro</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-grid fixed>
+    <ion-row>
+      <ion-col size="12">
+        <ion-searchbar
+          (ionInput)="salvarPesquisa()"
+          [(ngModel)]="pesquisar"
+          placeholder="Pesquisar"
+          debounce="500"
+          type="text"
+        >
+        </ion-searchbar>
+
+        <form [formGroup]="cadastroForm">
+          <ion-item>
+            <ion-input
+              class="Input"
+              label="Nome:"
+              formControlName="nome"
+              label-placement="floating"
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="CPF:"
+              formControlName="cpf"
+              label-placement="floating"
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Email:"
+              formControlName="email"
+              label-placement="floating"
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-input
+              label="Numero:"
+              formControlName="numero"
+              label-placement="floating"
+            >
+            </ion-input>
+          </ion-item>
+
+          <ion-button
+            type="submit"
+            (click)="salvar()"
+            [disabled]="!cadastroForm.valid"
+            redx
+          >
+            <ion-icon name="save-outline" slot="start"> </ion-icon>
+
+            Salvar
+          </ion-button>
+        </form>
+
+        <div>
+          <ion-row>
+            <ion-col><strong>Nome</strong></ion-col>
+            <ion-col><strong>CPF</strong></ion-col>
+            <ion-col><strong>Email</strong></ion-col>
+            <ion-col><strong>Número</strong></ion-col>
+            <ion-col></ion-col>
+          </ion-row>
+          @if(cadastros.length == 0){
+          <p>Nenhum resultado encontrado</p>
+          } @for (item of cadastros; track item.cpf) {
+
+          <ion-row>
+            <ion-col>{{ item.nome }}</ion-col>
+            <ion-col>{{ item.cpf }}</ion-col>
+            <ion-col>{{ item.email }}</ion-col>
+            <ion-col>{{ item.numero }}</ion-col>
+            <ion-col>
+              <ion-icon name="trash-outline" (click)="excluir(item.cpf)">
+              </ion-icon>
+              <ion-icon
+                name="pencil-sharp"
+                (click)="redirecionar(item.cpf)"
+              ></ion-icon>
+            </ion-col>
+          </ion-row>
+
+          }
+        </div>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
